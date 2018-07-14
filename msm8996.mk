@@ -459,8 +459,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libcurl \
     libjson \
-    libtinyxml \
-    libxml2
+    libtinyxml
 
 # Treble
 PRODUCT_PACKAGES += \
