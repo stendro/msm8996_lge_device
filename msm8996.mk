@@ -62,8 +62,8 @@ PRODUCT_PACKAGES += \
 # Properties
 include $(LOCAL_PATH)/vendor_prop.mk
 
-PRODUCT_ENFORCE_RRO_TARGETS := \
-    framework-res
+# Overlays
+PRODUCT_ENFORCE_RRO_TARGETS := *
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
