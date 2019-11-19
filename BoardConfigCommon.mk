@@ -134,7 +134,6 @@ TARGET_LD_SHIM_LIBS += \
     /system/vendor/lib/libbwfocuspeaking.so|/system/vendor/lib/libshim_bwfocus.so
 endif
 USE_CAMERA_STUB := true
-USE_DEVICE_SPECIFIC_CAMERA := true
 
 # CMHW
 BOARD_HARDWARE_CLASS += $(COMMON_PATH)/lineagehw
