@@ -233,10 +233,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/lge/configs/media_profiles-$(LGE_CODE_NAME).xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
 
-# Charger
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # Device init scripts
 PRODUCT_PACKAGES += \
     fstab.qcom \
