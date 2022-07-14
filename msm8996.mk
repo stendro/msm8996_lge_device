@@ -113,6 +113,13 @@ PRODUCT_PACKAGES += \
     hwaddrs \
     libbt-vendor
 
+# FM
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio@1.0-impl \
+    FMRadio \
+    brcm-uim-sysfs \
+    libfmjni
+
 # Camera
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
