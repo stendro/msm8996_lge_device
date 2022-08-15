@@ -1,0 +1,14 @@
+# HDR
+PRODUCT_PROPERTY_OVERRIDES += \
+    sys.hwc_disable_hdr=1
+
+# Radio
+ifeq ($(LGE_DEVICE),rs988)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=10 \
+    telephony.lteOnCdmaDevice=1
+else # h850 & h830
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=9 \
+    telephony.lteOnGsmDevice=1
+endif

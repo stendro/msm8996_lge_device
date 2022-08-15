@@ -11,11 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+#
 LOCAL_PATH := $(call my-dir)
+include $(LOCAL_PATH)/../lge/devices.txt
+
+ifneq ($(filter $(LGE_G5) $(LGE_V20),$(TARGET_DEVICE)),)
+include $(CLEAR_VARS)
+LOCAL_WHOLE_STATIC_LIBRARIES := \
+    cpufeatures
+
+LOCAL_MODULE := libshim_bwfocus
+LOCAL_MODULE_TAGS := optional
+LOCAL_MULTILIB := 32
+LOCAL_VENDOR_MODULE := true
+include $(BUILD_SHARED_LIBRARY)
+$(call import-module,android/cpufeatures)
+endif
 
 include $(CLEAR_VARS)
-
 LOCAL_SRC_FILES := \
     camera_shim.cpp
 
@@ -30,6 +43,4 @@ LOCAL_MODULE := libshim_camera
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 32
 LOCAL_VENDOR_MODULE := true
-
 include $(BUILD_SHARED_LIBRARY)
-

@@ -15,15 +15,45 @@
 # limitations under the License.
 #
 
-# Inherit from common lge product
-$(call inherit-product-if-exists, device/lge/common/common.mk)
+# Setup lge variables
+include $(LOCAL_PATH)/lge/setup.txt
+
+# Inherit from the AOSP product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
+
+# Inherit from custom vendor
+$(call inherit-product, vendor/$(CUSTOM_VENDOR)/config/common_full_phone.mk)
 
 # Inherit proprietary blobs
-$(call inherit-product, vendor/lge/msm8996-common/msm8996-common-vendor.mk)
+$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE)/$(LGE_DEVICE)-vendor.mk)
+$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE_FAMILY)-common/$(LGE_DEVICE_FAMILY)-common-vendor.mk)
+$(call inherit-product, vendor/$(BOARD_VENDOR)/msm8996-common/msm8996-common-vendor.mk)
+
+# Android version at launch
+ifeq ($(LGE_DEVICE_FAMILY),g5)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_m.mk)
+else # g6 & v20
+$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_n.mk)
+endif
+
+# Inherit from common product
+$(call inherit-product-if-exists, device/$(BOARD_VENDOR)/common/common.mk)
+
+# Build options
+WITH_GAPPS := false
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/lge/overlay/$(LGE_CODE_NAME)
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/lge/overlay-lineage/$(LGE_CODE_NAME)
+
+# Hide v20 notch
+ifeq ($(LGE_DEVICE_FAMILY),v20)
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
+endif
 
 # Properties
 -include $(LOCAL_PATH)/vendor_prop.mk
@@ -81,6 +111,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.nxp.mifare.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
 
+# Boot animation
+ifeq ($(LGE_DEVICE_FAMILY),g6)
+TARGET_SCREEN_HEIGHT := 2880
+TARGET_SCREEN_WIDTH := 1440
+else # g5 & v20
+TARGET_SCREEN_HEIGHT := 2560
+TARGET_SCREEN_WIDTH := 1440
+endif
+TARGET_BOOT_ANIMATION_RES := 1440
+TARGET_BOOTANIMATION_SIZE := 1440p
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.service \
@@ -98,7 +139,23 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing \
     libvolumelistener
 
+ifeq ($(LGE_DEVICE_FAMILY),v20)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/audio/audio_platform_info-quad_dac.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info-quad_dac.xml \
+    $(LOCAL_PATH)/lge/audio/mixer_paths_tasha-quad_dac.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha-quad_dac.xml
+endif
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/audio/mixer_paths_tasha-$(LGE_CODE_NAME).xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha.xml
+
 -include $(LOCAL_PATH)/audio/config.mk
+
+# Quad DAC
+ifeq ($(LGE_DEVICE_FAMILY),v20)
+PRODUCT_PACKAGES += \
+    quad_dac \
+    QuadDacTile
+endif
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -121,6 +178,38 @@ PRODUCT_PACKAGES += \
     camera.device@3.2-impl \
     libshim_camera \
     Snap
+
+ifneq ($(LGE_DEVICE_FAMILY),g6)
+PRODUCT_PACKAGES += \
+    libshim_bwfocus
+endif
+
+# Fingerprint
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.1-service
+
+# HDR
+ifeq ($(LGE_DEVICE_FAMILY),g6)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/configs/hdr_tm_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/hdr_tm_config.xml
+endif
+
+# IR
+ifneq ($(LGE_DEVICE_FAMILY),g6)
+PRODUCT_PACKAGES += \
+    android.hardware.ir@1.0-service.lge
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.consumerir.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.consumerir.xml
+endif
+
+# Lights
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-service.$(LGE_CODE_NAME)
+
+# Media
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/configs/media_profiles-$(LGE_CODE_NAME).xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -301,7 +390,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/powerhint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.xml \
-    $(LOCAL_PATH)/configs/perf/perf-profile0.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile0.conf
+    $(LOCAL_PATH)/configs/perf/perf-profile0.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile0.conf \
+    $(LOCAL_PATH)/lge/configs/thermal-engine-8996-$(LGE_CODE_NAME).conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-8996.conf
 
 # Qualcomm broadcast whitelist
 PRODUCT_COPY_FILES += \
@@ -330,9 +420,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
     android.hardware.sensors@1.0-service
-
+# NOTE: some devices copied to system
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
+    $(LOCAL_PATH)/lge/configs/sensor_def_$(LGE_CODE_NAME).conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_common.conf \
+    $(LOCAL_PATH)/lge/configs/sensor_def_var_$(LGE_CODE_NAME).conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_variable.conf
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -393,6 +485,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf
 
+# WiFi Calibration
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/configs/wifi/$(LGE_DEVICE)/bcmdhd.cal:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/bcmdhd.cal
+
 # WiFi Display
 PRODUCT_PACKAGES += \
     libnl
@@ -400,3 +496,10 @@ PRODUCT_PACKAGES += \
 # CryptfsHW
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.cryptfshw@1.0-service-qti.qsee
+
+# Device identifier. This must come after all inclusions
+PRODUCT_BRAND := $(BOARD_VENDOR)
+PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
+PRODUCT_NAME := $(CUSTOM_VENDOR)_$(PRODUCT_DEVICE)
+PRODUCT_MODEL := LG-$(shell echo $(PRODUCT_DEVICE) | tr a-z A-Z)
+PRODUCT_MANUFACTURER := $(shell echo $(PRODUCT_BRAND) | tr a-z A-Z)

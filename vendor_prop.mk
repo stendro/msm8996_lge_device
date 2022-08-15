@@ -2,6 +2,9 @@
 # Vendor Properties for LG MSM8996
 #
 
+# Device Specific
+-include $(LOCAL_PATH)/lge/vendor_prop_$(LGE_CODE_NAME).txt
+
 # Art
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sys.fw.dex2oat_thread_count=4
@@ -30,7 +33,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio.offload.gapless.enabled=true \
     vendor.audio.safx.pbe.enabled=true \
     vendor.audio.parser.ip.buffer.size=262144 \
-    vendor.audio.hw.aac.encoder=false \
+    vendor.audio.hw.aac.encoder=true \
     vendor.audio.use.sw.alac.decoder=true \
     vendor.audio.use.sw.ape.decoder=true \
     vendor.audio.flac.sw.decoder.24bit=true \
@@ -79,6 +82,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.iwlan.enable=true \
     persist.data.mode=concurrent \
     persist.data.netmgrd.qos.enable=true
+
+# Dex2oat
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.boot-dex2oat-cpu-set=0,1,2,3 \
+    dalvik.vm.image-dex2oat-cpu-set=2,3 \
+    dalvik.vm.dex2oat-cpu-set=2,3
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -151,7 +160,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Netflix
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.netflix.bsp_rev=Q660-13149-1
-    
+
 # OpenGLES
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610

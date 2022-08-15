@@ -1,0 +1,31 @@
+# HDR
+PRODUCT_PROPERTY_OVERRIDES += \
+    sys.hwc_disable_hdr=1
+
+# Radio
+ifeq ($(LGE_DEVICE),ls997)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=10 \
+    ro.cdma.home.operator.numeric=310120 \
+    ro.cdma.home.operator.alpha=Sprint \
+    ro.telephony.default_cdma_sub=1 \
+    telephony.lteOnCdmaDevice=1
+else ifeq ($(LGE_DEVICE),us996)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=10 \
+    telephony.lteOnCdmaDevice=1
+else ifeq ($(LGE_DEVICE),vs995)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=10 \
+    telephony.lteOnCdmaDevice=1 \
+    ro.cdma.home.operator.alpha=Verizon \
+    ro.cdma.home.operator.numeric=311480
+else ifeq ($(LGE_DEVICE),h990)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=9 \
+    telephony.lteOnCdmaDevice=1
+else # h918 & h910
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.default_network=9 \
+    telephony.lteOnGsmDevice=1
+endif

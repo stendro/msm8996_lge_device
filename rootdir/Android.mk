@@ -1,5 +1,5 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+include $(LOCAL_PATH)/../lge/setup.txt
 
 # Device init scripts
 
@@ -35,7 +35,6 @@ LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_SRC_FILES    := bin/init.qcom.sh
 LOCAL_VENDOR_MODULE    := true
-# init.radio.sh is defined in variant trees
 LOCAL_REQUIRED_MODULES := init.radio.sh
 include $(BUILD_PREBUILT)
 
@@ -81,4 +80,12 @@ LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := etc/ueventd.qcom.rc
 # this needs to be in /vendor/ueventd.rc
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.radio.sh
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := ../lge/init.radio-$(LGE_CODE_NAME).sh
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/bin
 include $(BUILD_PREBUILT)

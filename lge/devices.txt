@@ -1,0 +1,4 @@
+# Device targets
+LGE_G5 := rs988 h850 h830 g5
+LGE_G6 := us997 h872 h870 g6
+LGE_V20 := ls997 us996 vs995 h990 h918 h910 v20

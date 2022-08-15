@@ -15,10 +15,13 @@
 # limitations under the License.
 #
 
-COMMON_PATH := device/lge/msm8996-common
+# Setup variables
+COMMON_PATH := device/$(PRODUCT_BRAND)/msm8996-common
+CUSTOM_VENDOR := $(shell echo $(PRODUCT_NAME) | cut -d_ -f1)
+include $(COMMON_PATH)/lge/setup.txt
 
-# inherit from common lge
--include device/lge/common/BoardConfigCommon.mk
+# Inherit from common product
+-include device/$(PRODUCT_BRAND)/common/BoardConfigCommon.mk
 
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 
@@ -39,8 +42,11 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := kryo
 
 TARGET_BOARD_PLATFORM := msm8996
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno530
-
 TARGET_USES_64_BIT_BINDER := true
+TARGET_BOARD_INFO_FILE := $(COMMON_PATH)/board-info.txt
+
+# OTA Assert
+TARGET_OTA_ASSERT_DEVICE := $(LGE_OTA),$(LGE_DEVICE)
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8996
@@ -51,15 +57,17 @@ HWUI_COMPILE_FOR_PERF := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
-BOARD_KERNEL_CMDLINE += androidboot.usbconfigfs=true
-BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff
+BOARD_KERNEL_CMDLINE += user_debug=31 msm_rtb.filter=0x237 lpm_levels.sleep_disabled=1
+BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom androidboot.usbconfigfs=true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 4096
+# TODO: Look at these offsets
 BOARD_KERNEL_TAGS_OFFSET := 0x02000000
 BOARD_RAMDISK_OFFSET := 0x02200000
 BOARD_KERNEL_IMAGE_NAME := Image.lz4-dtb
-TARGET_KERNEL_SOURCE := kernel/lge/msm8996
 TARGET_KERNEL_NEW_GCC_COMPILE := true
+TARGET_KERNEL_SOURCE := kernel/$(PRODUCT_BRAND)/msm8996
+TARGET_KERNEL_CONFIG := $(CUSTOM_VENDOR)_$(LGE_DEVICE)_defconfig
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -123,6 +131,10 @@ PRODUCT_COPY_FILES += \
 TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib/hw/camera.msm8996.so|/system/vendor/lib/libshim_camera.so \
     /system/vendor/lib/libmmcamera_ppeiscore.so|/system/vendor/lib/libshim_camera.so
+ifneq ($(LGE_DEVICE_FAMILY),g6)
+TARGET_LD_SHIM_LIBS += \
+    /system/vendor/lib/libbwfocuspeaking.so|/system/vendor/lib/libshim_bwfocus.so
+endif
 USE_CAMERA_STUB := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
@@ -141,12 +153,16 @@ TARGET_USES_OVERLAY := true
 USE_OPENGL_RENDERER := true
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
-HAVE_ADRENO_SOURCE:= false
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
+HAVE_ADRENO_SOURCE := false
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 TARGET_USES_HWC2 := true
 TARGET_USES_GRALLOC1 := true
+ifeq ($(LGE_DEVICE_FAMILY),g6)
+TARGET_HAS_HDR_DISPLAY := true
+TARGET_HAS_WIDE_COLOR_DISPLAY := true
+endif
 
 # DRM
 TARGET_ENABLE_MEDIADRM_64 := true
@@ -162,13 +178,39 @@ USE_DEVICE_SPECIFIC_GPS := true
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
+DEVICE_MANIFEST_FILE += $(COMMON_PATH)/lge/manifest-$(LGE_CODE_NAME).xml
 DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
 TARGET_FS_CONFIG_GEN += $(COMMON_PATH)/config.fs
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
 
 # Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
 
 # Partitions
+ifeq ($(LGE_DEVICE_FAMILY),g5)
+BOARD_CACHEIMAGE_PARTITION_SIZE := 536870912
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4685037568
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 25832714240
+else ifeq ($(LGE_DEVICE_FAMILY),g6)
+ifeq ($(LGE_DEVICE),us997)
+BOARD_CACHEIMAGE_PARTITION_SIZE := 2172649472
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 6064963584
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 23026728960
+else # h872 & h870
+BOARD_CACHEIMAGE_PARTITION_SIZE := 1291845632
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 5863636992
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 24175968256
+endif
+else # v20
+BOARD_CACHEIMAGE_PARTITION_SIZE := 1288490180
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 5863636992
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 24897388544
+endif
+BOARD_BOOTIMAGE_PARTITION_SIZE := 41943040
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 41943040
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -195,6 +237,7 @@ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
 # SELinux policies
 include device/qcom/sepolicy-legacy-um/SEPolicy.mk
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/lge/sepolicy/$(LGE_CODE_NAME)
 SELINUX_IGNORE_NEVERALLOWS := true
 
 # Thermal
@@ -220,4 +263,6 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm8996
 
 # inherit from the proprietary version
-include vendor/lge/msm8996-common/BoardConfigVendor.mk
+include vendor/$(PRODUCT_BRAND)/msm8996-common/BoardConfigVendor.mk
+include vendor/$(PRODUCT_BRAND)/$(LGE_DEVICE_FAMILY)-common/BoardConfigVendor.mk
+include vendor/$(PRODUCT_BRAND)/$(LGE_DEVICE)/BoardConfigVendor.mk

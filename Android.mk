@@ -16,13 +16,11 @@
 #
 
 LOCAL_PATH := $(call my-dir)
+include $(LOCAL_PATH)/lge/devices.txt
 
-ifneq ($(filter g5 h830 h850 rs988 v20 h910 h915 h918 h990 vs995 us996 ls997 g6 h870 h872 us997,$(TARGET_DEVICE)),)
-
+ifneq ($(filter $(LGE_G5) $(LGE_G6) $(LGE_V20),$(TARGET_DEVICE)),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
-
 include $(CLEAR_VARS)
-
 # CPPF Images
 CPPF_IMAGES := \
     cppf.b00 cppf.b01 cppf.b02 cppf.b03 cppf.b04 \
@@ -131,5 +129,4 @@ $(RFS_MSM_MPSS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	$(hide) ln -sf /firmware $@/readonly/firmware
 
 ALL_DEFAULT_INSTALLED_MODULES += $(RFS_MSM_ADSP_SYMLINKS) $(RFS_MSM_MPSS_SYMLINKS)
-
 endif
