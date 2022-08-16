@@ -14,22 +14,17 @@
 # limitations under the License.
 #
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+# Release name (automatically taken from this file's suffix)
+PRODUCT_RELEASE_NAME := $(lastword $(subst /, ,$(lastword $(subst _, ,$(firstword $(subst ., ,$(MAKEFILE_LIST)))))))
 
-# Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lighthouse/config/common_full_phone.mk)
+# Custom vendor used in build tree (automatically taken from this file's prefix)
+CUSTOM_VENDOR := $(lastword $(subst /, ,$(firstword $(subst _, ,$(firstword $(MAKEFILE_LIST))))))
 
-# Inherit from h815 device
-$(call inherit-product, device/lge/h850/device.mk)
+# OEM Info (automatically taken from device tree path)
+BOARD_VENDOR := $(or $(word 2,$(subst /, ,$(firstword $(MAKEFILE_LIST)))),$(value 2))
 
-# Set those variables here to overwrite the inherited values.
-PRODUCT_DEVICE := h850
-PRODUCT_NAME := lighthouse_h850
-PRODUCT_BRAND := lge
-PRODUCT_MODEL := LG-H850
-PRODUCT_MANUFACTURER := LGE
+# Inherit from common board
+$(call inherit-product, device/$(BOARD_VENDOR)/msm8996-common/msm8996.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE="h1" \
@@ -38,6 +33,3 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="h1_global_com-user 8.0.0 OPR1.170623.032 190380127377a release-keys"
 
 BUILD_FINGERPRINT := "lge/h1_global_com/h1:8.0.0/OPR1.170623.032/190380127377a:user/release-keys"
-
-WITH_GAPPS := false
-# LIGHTHOUSE_BUILD_TYPE=OFFICIAL

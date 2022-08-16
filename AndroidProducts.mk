@@ -13,9 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Finds the device name from the current folder name
+PRODUCT_RELEASE_NAME := $(shell basename $(LOCAL_DIR))
+
+# Finds the product makefile in current dir, and extracts the vendor name
+CUSTOM_VENDOR := $(shell find $(LOCAL_DIR) -name *_*.mk -printf '%f' | cut -d_ -f1)
+
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lighthouse_h850.mk
+    $(LOCAL_DIR)/$(CUSTOM_VENDOR)_$(PRODUCT_RELEASE_NAME).mk
 
 COMMON_LUNCH_CHOICES := \
-    lighthouse_h850-userdebug \
-    lighthouse_h850-eng
+    $(CUSTOM_VENDOR)_$(PRODUCT_RELEASE_NAME)-userdebug \
+    $(CUSTOM_VENDOR)_$(PRODUCT_RELEASE_NAME)-user \
+    $(CUSTOM_VENDOR)_$(PRODUCT_RELEASE_NAME)-eng

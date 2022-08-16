@@ -24,7 +24,8 @@
 # components.
 
 LOCAL_PATH := $(call my-dir)
+LGE_DEVICE := $(shell basename $(LOCAL_PATH))
 
-ifneq ($(filter h850,$(TARGET_DEVICE)),)
+ifneq ($(filter $(LGE_DEVICE),$(TARGET_DEVICE)),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif

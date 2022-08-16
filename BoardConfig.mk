@@ -15,21 +15,7 @@
 # limitations under the License.
 #
 
-DEVICE_PATH := device/lge/h850
+DEVICE_PATH := device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)
 
-# inherit from common g5
--include device/lge/g5-common/BoardConfigCommon.mk
-
-TARGET_OTA_ASSERT_DEVICE := g5,h1,h850
-
-# Kernel
-TARGET_KERNEL_CONFIG := lineageos_h850_defconfig
-
-# Partitions
-# Override this after inheriting g5 common size
-# h850 system image partition is sized differently than US variants
-BOARD_CACHEIMAGE_PARTITION_SIZE := 536870912
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4148166656
-
-# inherit from the proprietary version
-include vendor/lge/h850/BoardConfigVendor.mk
+# Inherit from common board
+include device/$(PRODUCT_BRAND)/msm8996-common/BoardConfigCommon.mk
