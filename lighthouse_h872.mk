@@ -27,9 +27,9 @@ BOARD_VENDOR := $(or $(word 2,$(subst /, ,$(firstword $(MAKEFILE_LIST)))),$(valu
 $(call inherit-product, device/$(BOARD_VENDOR)/msm8996-common/msm8996.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    TARGET_DEVICE="h1" \
-    PRODUCT_DEVICE="h1" \
-    PRODUCT_NAME="h1_global_com" \
-    PRIVATE_BUILD_DESC="h1_global_com-user 8.0.0 OPR1.170623.032 190380127377a release-keys"
+    TARGET_DEVICE="lucye" \
+    PRODUCT_DEVICE="lucye" \
+    PRODUCT_NAME="lucye_tmo_us" \
+    PRIVATE_BUILD_DESC="lucye_tmo_us-user 8.0.0 OPR1.170623.032 182841114a294 release-keys"
 
-BUILD_FINGERPRINT := "lge/h1_global_com/h1:8.0.0/OPR1.170623.032/190380127377a:user/release-keys"
+BUILD_FINGERPRINT := "lge/lucye_tmo_us/lucye:8.0.0/OPR1.170623.032/182841114a294:user/release-keys"
