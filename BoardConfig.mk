@@ -19,3 +19,6 @@ DEVICE_PATH := device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)
 
 # Inherit from common board
 include device/$(PRODUCT_BRAND)/msm8996-common/BoardConfigCommon.mk
+
+# Dual-sim
+BOARD_KERNEL_CMDLINE += model.name=LG-H990ds lge.sim_num=2

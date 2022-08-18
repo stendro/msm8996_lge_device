@@ -26,6 +26,12 @@ BOARD_VENDOR := $(or $(word 2,$(subst /, ,$(firstword $(MAKEFILE_LIST)))),$(valu
 # Inherit from common board
 $(call inherit-product, device/$(BOARD_VENDOR)/msm8996-common/msm8996.mk)
 
+# Dual-sim
+PRODUCT_PACKAGES += \
+    rild2.rc
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.radio.multisim.config=dsds
+
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE="elsa" \
     PRODUCT_DEVICE="elsa" \
