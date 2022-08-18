@@ -29,7 +29,7 @@ $(call inherit-product, device/$(BOARD_VENDOR)/msm8996-common/msm8996.mk)
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE="h1" \
     PRODUCT_DEVICE="h1" \
-    PRODUCT_NAME="h1_global_com" \
-    PRIVATE_BUILD_DESC="h1_global_com-user 8.0.0 OPR1.170623.032 190380127377a release-keys"
+    PRODUCT_NAME="h1_lra_us" \
+    PRIVATE_BUILD_DESC="h1_lra_us-user 7.0 NRD90U 1707917149a1b release-keys"
 
-BUILD_FINGERPRINT := "lge/h1_global_com/h1:8.0.0/OPR1.170623.032/190380127377a:user/release-keys"
+BUILD_FINGERPRINT := "lge/h1_lra_us/h1:7.0/NRD90U/1707917149a1b:user/release-keys"
