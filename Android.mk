@@ -19,7 +19,10 @@ LOCAL_PATH := $(call my-dir)
 include $(LOCAL_PATH)/lge/devices.txt
 
 ifneq ($(filter $(LGE_G5) $(LGE_G6) $(LGE_V20),$(TARGET_DEVICE)),)
-include $(call all-makefiles-under,$(LOCAL_PATH))
+
+subdir_makefiles=$(call first-makefiles-under,$(LOCAL_PATH))
+$(foreach mk,$(subdir_makefiles),$(info including $(mk) ...)$(eval include $(mk)))
+
 include $(CLEAR_VARS)
 # CPPF Images
 CPPF_IMAGES := \
