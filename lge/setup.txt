@@ -10,6 +10,13 @@ else
 LGE_DEVICE := $(PRODUCT_RELEASE_NAME)
 endif
 
+# Determine bdroid config
+ifneq ($(filter h870 h850 rs988 h990,$(LGE_DEVICE)),)
+LGE_BCMCHIP := bcm4345
+else
+LGE_BCMCHIP := bcm435x
+endif
+
 # Prepare lge device config
 ifneq ($(filter $(LGE_G5),$(LGE_DEVICE)),)
 LGE_DEVICE_FAMILY := g5

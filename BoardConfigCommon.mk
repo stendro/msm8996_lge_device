@@ -123,7 +123,7 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_HAVE_LGE_BLUESLEEP := true
 BOARD_CUSTOM_FM_CONFIG := $(COMMON_PATH)/bluetooth/fm_vndcfg.txt
 BOARD_CUSTOM_BT_CONFIG := $(COMMON_PATH)/bluetooth/libbt_vndcfg.txt
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth/$(LGE_BCMCHIP)
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
 
