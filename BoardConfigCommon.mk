@@ -24,6 +24,7 @@ include $(COMMON_PATH)/lge/setup.txt
 -include device/$(PRODUCT_BRAND)/common/BoardConfigCommon.mk
 
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+ALLOW_MISSING_DEPENDENCIES := true
 
 # Architecture
 TARGET_ARCH := arm64
