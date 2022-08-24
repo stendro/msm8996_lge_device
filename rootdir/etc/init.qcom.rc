@@ -321,35 +321,21 @@ on boot
     chown system system /sys/class/timed_output/vibrator/amp
     chmod 664 /sys/class/timed_output/vibrator/amp
 
-    # Fingerprints
-    chown system input /sys/devices/virtual/input/lge_fingerprint/testmode
-    chown system input /sys/devices/virtual/input/lge_fingerprint/spitest
-    chown system input /sys/devices/virtual/input/lge_fingerprint/zonetest
-    chown system input /sys/devices/virtual/input/lge_fingerprint/checkerbdtest
-    chown system input /sys/devices/virtual/input/lge_fingerprint/rubbertest
-    chown system input /sys/devices/virtual/input/lge_fingerprint/intstatus
-    chown system input /sys/devices/virtual/input/lge_fingerprint/qup_id
-    chown system input /sys/devices/virtual/input/lge_fingerprint/waitfinger
-    chown system input /sys/devices/virtual/input/lge_fingerprint/spi_prepare
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/testmode
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/spitest
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/zonetest
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/checkerbdtest
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/rubbertest
-    chmod 0440 /sys/devices/virtual/input/lge_fingerprint/intstatus
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/qup_id
-    chmod 0220 /sys/devices/virtual/input/lge_fingerprint/waitfinger
-    chmod 0660 /sys/devices/virtual/input/lge_fingerprint/spi_prepare
-    chown system input /sys/bus/spi/devices/spi8.1/bus_lock
-    chown system input /sys/bus/spi/devices/spi8.1/clk_enable
-    chown system input /sys/bus/spi/devices/spi8.1/fabric_vote
-    chown system input /sys/bus/spi/devices/spi8.1/hw_reset
-    chown system input /sys/bus/spi/devices/spi8.1/irq
-    chown system input /sys/bus/spi/devices/spi8.1/pinctl_set
-    chown system input /sys/bus/spi/devices/spi8.1/spi_prepare
-    chown system input /sys/bus/spi/devices/spi8.1/spi_owner
-    chown system input /sys/bus/spi/devices/spi8.1/regulator_enable
-    chown system input /sys/bus/spi/devices/spi8.1/wakeup_enable
+    # Fingerprint
+    chown system system /sys/devices/virtual/input/lge_fingerprint/bus_lock
+    chown system system /sys/devices/virtual/input/lge_fingerprint/clk_enable
+    chown system system /sys/devices/virtual/input/lge_fingerprint/fabric_vote
+    chown system system /sys/devices/virtual/input/lge_fingerprint/hw_reset
+    chown system system /sys/devices/virtual/input/lge_fingerprint/irq
+    chown system system /sys/devices/virtual/input/lge_fingerprint/pinctl_set
+    chown system system /sys/devices/virtual/input/lge_fingerprint/spi_prepare
+    chown system system /sys/devices/virtual/input/lge_fingerprint/spi_owner
+    chown system system /sys/devices/virtual/input/lge_fingerprint/regulator_enable
+    chown system system /sys/devices/virtual/input/lge_fingerprint/wakeup_enable
+    chmod 0200 /sys/devices/virtual/input/lge_fingerprint/clk_enable
+    chmod 0200 /sys/devices/virtual/input/lge_fingerprint/wakeup_enable
+    chmod 0644 /sys/devices/virtual/input/lge_fingerprint/irq
+    chmod 0644 /sys/devices/virtual/input/lge_fingerprint/spi_prepare
 
     write /proc/sys/net/core/netdev_max_backlog 5000
 
@@ -388,11 +374,21 @@ on post-fs-data
     # Create directory used for camera
     mkdir /data/vendor/camera 0770 camera camera
 
-    #Create directories for Fingerprint
+    # Create directories for Fingerprint
+    mkdir /persist/qti_fp 0700 system system
     mkdir /data/vendor/misc/qti_fp 0770 system system
     mkdir /data/vendor/misc/qti_fp/bg_estimation 0770 system system
     mkdir /data/vendor/misc/qti_fp/calib_test 0770 system system
     mkdir /data/vendor/misc/qti_fp/database 0770 system system
+
+    # Create /data/vendor/tzstorage directory for SFS listener
+    mkdir /data/vendor/tzstorage 0770 system system
+
+    # Create directory for apps access via QTEEConnector
+    mkdir /data/vendor/qtee 0770 system system
+
+    # Create directory for TZ Apps
+    mkdir /data/misc/qsee 0770 system system
 
     # create QDMA dropbox
     mkdir /data/vendor/qdmastats 0700 system system
@@ -895,13 +891,6 @@ service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqb
     user root
     group root
     writepid /dev/cpuset/system-background/tasks
-
-# oneshot service that loads fpc tz app in early phase.
-service fpc_early_loader /vendor/bin/fpc_early_loader
-    class late_start
-    user system
-    group system
-    oneshot
 
 on configure-cpuset
     # Update foreground and background cpusets

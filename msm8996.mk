@@ -185,7 +185,7 @@ endif
 
 # Fingerprint
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service
+    android.hardware.biometrics.fingerprint@2.1-service.lge_msm8996
 
 # HDR
 ifeq ($(LGE_DEVICE_FAMILY),g6)
