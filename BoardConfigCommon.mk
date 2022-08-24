@@ -265,7 +265,7 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm8996
 
-# inherit from the proprietary version
+# Inherit from the proprietary version
 include vendor/$(PRODUCT_BRAND)/msm8996-common/BoardConfigVendor.mk
 include vendor/$(PRODUCT_BRAND)/$(LGE_DEVICE_FAMILY)-common/BoardConfigVendor.mk
 include vendor/$(PRODUCT_BRAND)/$(LGE_DEVICE)/BoardConfigVendor.mk

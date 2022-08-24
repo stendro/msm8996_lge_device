@@ -26,9 +26,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 $(call inherit-product, vendor/$(CUSTOM_VENDOR)/config/common_full_phone.mk)
 
 # Inherit proprietary blobs
-$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE)/$(LGE_DEVICE)-vendor.mk)
-$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE_FAMILY)-common/$(LGE_DEVICE_FAMILY)-common-vendor.mk)
 $(call inherit-product, vendor/$(BOARD_VENDOR)/msm8996-common/msm8996-common-vendor.mk)
+$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE_FAMILY)-common/$(LGE_DEVICE_FAMILY)-common-vendor.mk)
+$(call inherit-product, vendor/$(BOARD_VENDOR)/$(LGE_DEVICE)/$(LGE_DEVICE)-vendor.mk)
 
 # Android version at launch
 ifeq ($(LGE_DEVICE_FAMILY),g5)
