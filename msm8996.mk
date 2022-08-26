@@ -55,6 +55,10 @@ PRODUCT_PACKAGES += \
     NoCutoutOverlay
 endif
 
+# Loggy loggin
+PRODUCT_PACKAGES += \
+    loggy.sh
+
 # Properties
 -include $(LOCAL_PATH)/vendor_prop.mk
 
