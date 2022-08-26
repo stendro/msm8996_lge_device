@@ -164,11 +164,18 @@ PRODUCT_PACKAGES += \
     libbt-vendor
 
 # FM
+ifneq ($(LGE_NOBCMFM),true)
 PRODUCT_PACKAGES += \
     android.hardware.broadcastradio@1.0-impl \
     FMRadio \
     brcm-uim-sysfs \
     libfmjni
+else
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio@1.0-impl \
+    FMRadio \
+    libfmjni
+endif
 
 # Camera
 PRODUCT_PACKAGES += \
