@@ -25,8 +25,10 @@ $(foreach mk,$(subdir_makefiles),$(info including $(mk) ...)$(eval include $(mk)
 
 include $(CLEAR_VARS)
 
-# FIRMWARE Mount Point
+# FIRMWARE Mount points
 FIRMWARE_MOUNT_POINT := $(TARGET_OUT_VENDOR)/firmware_mnt
+PERSIST_LG_MOUNT_POINT := $(TARGET_ROOT_OUT)/persist-lg
+PERSIST_MOUNT_POINT := $(TARGET_ROOT_OUT)/persist
 
 $(FIRMWARE_MOUNT_POINT):
 	@echo "Creating $(FIRMWARE_MOUNT_POINT)"
@@ -35,20 +37,32 @@ ifneq ($(TARGET_MOUNT_POINTS_SYMLINKS),false)
 	@ln -sf /vendor/firmware_mnt $(TARGET_ROOT_OUT)/firmware
 endif
 
-ALL_DEFAULT_INSTALLED_MODULES += $(FIRMWARE_MOUNT_POINT)
-# END FIRMWARE Mount Point
+$(PERSIST_LG_MOUNT_POINT):
+	@echo "Creating $(PERSIST_LG_MOUNT_POINT)"
+ifneq ($(TARGET_MOUNT_POINTS_SYMLINKS),false)
+	@ln -sf /mnt/vendor/persist-lg $(TARGET_ROOT_OUT)/persist-lg
+endif
+
+$(PERSIST_MOUNT_POINT):
+	@echo "Creating $(PERSIST_MOUNT_POINT)"
+ifneq ($(TARGET_MOUNT_POINTS_SYMLINKS),false)
+	@ln -sf /mnt/vendor/persist $(TARGET_ROOT_OUT)/persist
+endif
+
+ALL_DEFAULT_INSTALLED_MODULES += $(FIRMWARE_MOUNT_POINT) $(PERSIST_LG_MOUNT_POINT) $(PERSIST_MOUNT_POINT)
+# END FIRMWARE Mount points
 
 # CPPF Images
 CPPF_IMAGES := \
     cppf.b00 cppf.b01 cppf.b02 cppf.b03 cppf.b04 \
-    cppf.b05 cppf.b06 cppf.mdt
+    cppf.b05 cppf.b06 cppf.b07 cppf.mdt
 
 CPPF_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(CPPF_IMAGES)))
 $(CPPF_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@echo "CPPF firmware link: $@"
 	@mkdir -p $(dir $@)
 	@rm -rf $@
-	$(hide) ln -sf /persist-lg/firmware/$(notdir $@) $@
+	$(hide) ln -sf /mnt/vendor/persist-lg/firmware/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(CPPF_SYMLINKS)
 # END CPPF Images
@@ -56,14 +70,14 @@ ALL_DEFAULT_INSTALLED_MODULES += $(CPPF_SYMLINKS)
 # WIDEVINE Images
 WIDEVINE_IMAGES := \
     widevine.b00 widevine.b01 widevine.b02 widevine.b03 widevine.b04 \
-    widevine.b05 widevine.b06 widevine.mdt
+    widevine.b05 widevine.b06 widevine.b07 widevine.mdt
 
 WIDEVINE_SYMLINKS := $(addprefix $(TARGET_OUT_VENDOR)/firmware/,$(notdir $(WIDEVINE_IMAGES)))
 $(WIDEVINE_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@echo "WIDEVINE firmware link: $@"
 	@mkdir -p $(dir $@)
 	@rm -rf $@
-	$(hide) ln -sf /persist-lg/firmware/$(notdir $@) $@
+	$(hide) ln -sf /mnt/vendor/persist-lg/firmware/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WIDEVINE_SYMLINKS)
 # END WIDEVINE Images

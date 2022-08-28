@@ -39,65 +39,83 @@ on early-init
     export EXTERNAL_STORAGE /sdcard
 
 on init
-   write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+    mkdir /mnt/vendor/persist-lg 0771 system system
+    mkdir /mnt/vendor/sns 0755 system system
+    mkdir /mnt/vendor/mpt 0775 system system
 
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom
     swapon_all /vendor/etc/fstab.qcom
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/data 0700 system system
+    mkdir /mnt/vendor/persist/bms 0700 root system
+
+    chown system system /mnt/vendor/persist-lg
+    chmod 0771 /mnt/vendor/persist-lg
+    chown system system /mnt/vendor/sns
+    chmod 0755 /mnt/vendor/sns
+    chown system system /mnt/vendor/mpt
+    chmod 0775 /mnt/vendor/mpt
+
     # These directories have different labeling in stock rom.
     # Jumping between stock and LineageOS needs restorecon -F
     # to apply our labeling.
     exec u:r:vendor_init:s0 root root -- /vendor/bin/toybox_vendor \
-      restorecon -RF /persist
+      restorecon -RF /mnt/vendor/persist
     exec u:r:vendor_init:s0 root root -- /vendor/bin/toybox_vendor \
-      restorecon -RF  /persist-lg
+      restorecon -RF  /mnt/vendor/persist-lg
     exec u:r:vendor_init:s0 root root -- /vendor/bin/toybox_vendor \
-      restorecon -RF  /sns
+      restorecon -RF  /mnt/vendor/sns
     exec u:r:vendor_init:s0 root root -- /vendor/bin/toybox_vendor \
-      restorecon -RF  /mpt
+      restorecon -RF  /mnt/vendor/mpt
 
-    mkdir /persist/rfs 0775 root system
-    mkdir /persist/hlos_rfs 0775 root system
-    chmod 0775 /persist/rfs
-    chmod 0775 /persist/rfs/shared
-    chown system system /persist/rfs/shared
-    chmod 0775 /persist/rfs/msm
-    chown system system /persist/rfs/msm
-    chmod 0775 /persist/rfs/msm/adsp
-    chown system system /persist/rfs/msm/adsp
-    chmod 0775 /persist/rfs/msm/mpss
-    chown system system /persist/rfs/msm/mpss
-    mkdir /persist/rfs/msm/slpi 0775 system system
-    chmod 0775 /persist/rfs/mdm
-    chown system system /persist/rfs/mdm
-    chmod 0775 /persist/rfs/mdm/adsp
-    chown system system /persist/rfs/mdm/adsp
-    chmod 0775 /persist/rfs/mdm/mpss
-    chown system system /persist/rfs/mdm/mpss
-    mkdir /persist/rfs/mdm/slpi 0775 system system
-    chmod 0775 /persist/rfs/mdm/sparrow
-    chown system system /persist/rfs/mdm/sparrow
-    mkdir /persist/rfs/mdm/tn 0775 system system
-    chown system system /persist/rfs/apq
-    chmod 0775 /persist/rfs/apq
-    chown system system /persist/rfs/apq/gnss
-    chmod 0775 /persist/rfs/apq/gnss
-    chmod 0775 /persist/hlos_rfs
+    mkdir /mnt/vendor/persist/rfs 0775 root system
+    mkdir /mnt/vendor/persist/hlos_rfs 0775 root system
+    chmod 0775 /mnt/vendor/persist/rfs
+    chmod 0775 /mnt/vendor/persist/rfs/shared
+    chown system system /mnt/vendor/persist/rfs/shared
+    chmod 0775 /mnt/vendor/persist/rfs/msm
+    chown system system /mnt/vendor/persist/rfs/msm
+    chmod 0775 /mnt/vendor/persist/rfs/msm/adsp
+    chown system system /mnt/vendor/persist/rfs/msm/adsp
+    chmod 0775 /mnt/vendor/persist/rfs/msm/cdsp
+    chown system system /mnt/vendor/persist/rfs/msm/cdsp
+    chmod 0775 /mnt/vendor/persist/rfs/msm/mpss
+    chown system system /mnt/vendor/persist/rfs/msm/mpss
+    mkdir /mnt/vendor/persist/rfs/msm/slpi 0775 system system
+    chmod 0775 /mnt/vendor/persist/rfs/mdm
+    chown system system /mnt/vendor/persist/rfs/mdm
+    chmod 0775 /mnt/vendor/persist/rfs/mdm/adsp
+    chown system system /mnt/vendor/persist/rfs/mdm/adsp
+    chmod 0775 /mnt/vendor/persist/rfs/mdm/mpss
+    chown system system /mnt/vendor/persist/rfs/mdm/mpss
+    mkdir /mnt/vendor/persist/rfs/mdm/slpi 0775 system system
+    chmod 0775 /mnt/vendor/persist/rfs/mdm/sparrow
+    chown system system /mnt/vendor/persist/rfs/mdm/sparrow
+    mkdir /mnt/vendor/persist/rfs/mdm/tn 0775 system system
+    chown system system /mnt/vendor/persist/rfs/apq
+    chmod 0775 /mnt/vendor/persist/rfs/apq
+    chown system system /mnt/vendor/persist/rfs/apq/gnss
+    chmod 0775 /mnt/vendor/persist/rfs/apq/gnss
+    chmod 0775 /mnt/vendor/persist/hlos_rfs
 
-    chown system system /persist/rfs/shared
-    chown system system /persist/rfs/msm
-    chown system system /persist/rfs/msm/adsp
-    chown system system /persist/rfs/msm/mpss
-    chown system system /persist/rfs/msm/slpi
-    chown system system /persist/rfs/mdm
-    chown system system /persist/rfs/mdm/adsp
-    chown system system /persist/rfs/mdm/mpss
-    chown system system /persist/rfs/mdm/sparrow
-    chown system system /persist/rfs/mdm/tn
-    chown system system /persist/rfs/apq
-    chown system system /persist/rfs/apq/gnss
+    chown system system /mnt/vendor/persist/rfs/shared
+    chown system system /mnt/vendor/persist/rfs/msm
+    chown system system /mnt/vendor/persist/rfs/msm/adsp
+    chown system system /mnt/vendor/persist/rfs/msm/cdsp
+    chown system system /mnt/vendor/persist/rfs/msm/mpss
+    chown system system /mnt/vendor/persist/rfs/msm/slpi
+    chown system system /mnt/vendor/persist/rfs/mdm
+    chown system system /mnt/vendor/persist/rfs/mdm/adsp
+    chown system system /mnt/vendor/persist/rfs/mdm/mpss
+    chown system system /mnt/vendor/persist/rfs/mdm/sparrow
+    chown system system /mnt/vendor/persist/rfs/mdm/tn
+    chown system system /mnt/vendor/persist/rfs/apq
+    chown system system /mnt/vendor/persist/rfs/apq/gnss
 
 on post-fs
     write /sys/devices/platform/lge-qfprom/sec_read 0
@@ -108,10 +126,10 @@ on post-fs-data
     mkdir /data/tombstones/lpass 0771 system system
     mkdir /data/tombstones/wcnss 0771 system system
     mkdir /data/tombstones/dsps 0771 system system
-    mkdir /persist/data/sfs 0700 system system
-    mkdir /persist/data/tz 0700 system system
-    mkdir /persist/data/qc_senseid 0700 system system
-    mkdir /persist/bms 0700 root system
+    mkdir /mnt/vendor/persist/data/sfs 0700 system system
+    mkdir /mnt/vendor/persist/data/tz 0700 system system
+    mkdir /mnt/vendor/persist/data/qc_senseid 0700 system system
+    mkdir /mnt/vendor/persist/bms 0700 root system
 
     # Create PERFD deamon related dirs
     mkdir /data/misc/perfd 0755 root system
