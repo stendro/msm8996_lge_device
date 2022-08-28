@@ -27,6 +27,7 @@
 
 import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
+import /vendor/etc/init/hw/init.lge.sensors.rc
 
 # Added for LineageOS device-specific portions
 import /vendor/etc/init/hw/init.device.rc
@@ -132,6 +133,19 @@ on early-boot
     write /sys/kernel/boot_cdsp/boot 1
     write /sys/kernel/boot_slpi/boot 1
     start vendor.graphics-sh
+
+    # Sensors
+    chown system system /mnt/vendor/persist/sensors
+    chown system system /mnt/vendor/persist/sensors/sns.reg
+    chown system system /mnt/vendor/persist/sensors/sensors_list.txt
+    chown system system /mnt/vendor/persist/sensors/registry
+    chown system system /mnt/vendor/persist/sensors/registry/registry
+    chown system system /mnt/vendor/persist/sensors/registry/registry/sensors_registry
+    chown system system /mnt/vendor/persist/sensors/sensors_settings
+    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_config
+    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_version
+    chown system system /mnt/vendor/persist/sensors/registry/config
+    chmod 0664 /mnt/vendor/persist/sensors/sensors_settings
 
 on boot
     # Bring up CPUs
@@ -788,7 +802,7 @@ service vendor.sensor-sh /vendor/bin/init.qcom.sensors.sh
     user root
     oneshot
 
-service vendor.sensors /vendor/bin/sensors.qti
+service vendor.sensors.qti /vendor/bin/sensors.qti
     class core
     user root
     group root system
