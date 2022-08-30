@@ -17,11 +17,6 @@ else
 LGE_BCMCHIP := bcm435x
 endif
 
-# Silabs fm radio
-ifneq ($(filter us997 h872,$(LGE_DEVICE)),)
-LGE_NOBCMFM := true
-endif
-
 # Prepare lge device config
 ifneq ($(filter $(LGE_G5),$(LGE_DEVICE)),)
 LGE_DEVICE_FAMILY := g5
