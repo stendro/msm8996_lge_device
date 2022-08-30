@@ -140,7 +140,8 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libvolumelistener
+    libvolumelistener \
+    libaudioroute
 
 ifeq ($(LGE_DEVICE_FAMILY),v20)
 PRODUCT_COPY_FILES += \
