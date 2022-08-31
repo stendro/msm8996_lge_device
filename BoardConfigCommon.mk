@@ -60,6 +60,7 @@ HWUI_COMPILE_FOR_PERF := true
 BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += user_debug=31 msm_rtb.filter=0x237 lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom androidboot.usbconfigfs=true
+BOARD_KERNEL_CMDLINE += androidboot.usbcontroller=6a00000.dwc3
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 4096
 # TODO: Look at these offsets
