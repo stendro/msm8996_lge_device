@@ -838,6 +838,12 @@ on property:netd.fstman.start=true
 on property:netd.fstman.start=false
     stop fstman
 
+service mlid /vendor/bin/mlid
+    class late_start
+    user gps
+    group gps
+    socket mlid stream 0666 gps gps
+
 service vendor.loc_launcher /vendor/bin/loc_launcher
     #loc_launcher will start as root and set its uid to gps
     class late_start
