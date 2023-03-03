@@ -23,7 +23,6 @@ include $(COMMON_PATH)/lge/setup.txt
 # Inherit from common product
 -include device/$(PRODUCT_BRAND)/common/BoardConfigCommon.mk
 
-BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # Architecture
