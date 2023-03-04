@@ -60,7 +60,7 @@ PRODUCT_PACKAGES += \
     loggy.sh
 
 # Properties
--include $(LOCAL_PATH)/vendor_prop.mk
+include $(LOCAL_PATH)/vendor_prop.mk
 
 PRODUCT_ENFORCE_RRO_TARGETS := \
     framework-res
