@@ -198,9 +198,6 @@ BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_ROOT_EXTRA_SYMLINKS := /mnt/vendor/sns:/sns /mnt/vendor/mpt:/mpt
 
-# pdfium
-TARGET_NEEDS_PDFIUM_BIGINT := true
-
 # Power
 TARGET_HAS_NO_WLAN_STATS := true
 
