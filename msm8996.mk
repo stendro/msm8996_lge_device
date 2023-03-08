@@ -530,10 +530,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/lge/configs/wifi/$(LGE_DEVICE)/bcmdhd.cal:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/bcmdhd.cal
 
-# Wi-Fi Display
-PRODUCT_PACKAGES += \
-    libnl
-
 # Device identifier. This must come after all inclusions
 PRODUCT_BRAND := $(BOARD_VENDOR)
 PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
