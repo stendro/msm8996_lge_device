@@ -146,8 +146,13 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/lge/audio/mixer_paths_tasha-quad_dac.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha-quad_dac.xml
 endif
 
+ifeq ($(LGE_DEVICE),h870)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lge/audio/mixer_paths_tasha-h870.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha.xml
+else
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/lge/audio/mixer_paths_tasha-$(LGE_CODE_NAME).xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha.xml
+endif
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
