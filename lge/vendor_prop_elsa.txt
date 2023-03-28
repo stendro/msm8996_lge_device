@@ -1,3 +1,7 @@
+# Cutout
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.support_hide_display_cutout=true
+
 # HDR
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.hwc_disable_hdr=1

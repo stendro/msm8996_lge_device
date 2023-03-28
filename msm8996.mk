@@ -177,7 +177,7 @@ endif
 # Hide v20 notch
 ifeq ($(LGE_DEVICE_FAMILY),v20)
 PRODUCT_PACKAGES += \
-    NoCutoutOverlay
+    AvoidAppsInCutoutOverlay
 endif
 
 # IR
